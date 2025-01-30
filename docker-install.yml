@@ -1,0 +1,31 @@
+---
+- hosts: all
+  become: true
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install Docker depedencies
+      apt:
+        name:
+          -docker.io
+          -docker-compose
+          -python3-pip
+        state: present 
+
+    - name: Install Docker Compose
+      pip:
+        name: docker-compose
+        state: present
+        executable: pip3
+
+    - name: Copy index.html
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html
+        owner: root
+        group: root
+        mode: 0644
